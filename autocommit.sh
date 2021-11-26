@@ -1,5 +1,4 @@
 #!/bin/sh
-d:
 cd D:/Work/InformeMMTTO
 git add --all
 timestamp() {
