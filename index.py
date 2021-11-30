@@ -40,7 +40,7 @@ if __name__ == "__main__":
         if book_mmto is None:
             raise Exception(f"El libro no se encuentra o no se puede abrir")
 
-        fechas = book_mmto.macro('Módulo1.PreProcesarDatos')()
+        _dates = book_mmto.macro('Módulo1.PreProcesarDatos')()
         book_mmto.save()
         book_mmto.close()
         

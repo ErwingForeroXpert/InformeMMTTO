@@ -1,6 +1,5 @@
 #!/bin/sh
-cd d:
-cd D:/Work/InformeMMTTO
+cd C:/Work/InformeMMTTO
 git add --all
 timestamp() {
   date +"at %H:%M:%S on %d/%m/%Y"
