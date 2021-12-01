@@ -42,9 +42,24 @@ def deleteTemporals(path):
 
 def getMostRecentFile(path, _filter=None):
     list_of_files = glob.glob(fr'{path}/*')
-    list_of_files = _filter(
-        list_of_files) if _filter is not None else list_of_files
+    list_of_files = filter(_filter, list_of_files) if _filter is not None else list_of_files
     return max(list_of_files, key=os.path.getctime)
+
+def getIntervalDates(_dates):
+
+    temp_dates = []
+    if len(_dates[0]) > 1:
+        years_sort = sorted(_dates[0]) #2011, 2012,...
+        moths_sort = enumerate(sorted(_dates[1], reverse=True)) #12, 11, 10
+        for i, month in moths_sort: 
+            if abs(moths_sort[0] - month) < 4:
+                temp_dates.append([years_sort[0], month])
+            else:
+                temp_dates.append([years_sort[1], month])
+    else:
+        temp_dates = [[_dates[0][0], month] for month in _dates[1]]
+
+    return temp_dates
 
 def numToMonth(num):
     return {
@@ -54,10 +69,10 @@ def numToMonth(num):
         4:  "Abril",
         5: "Mayo",
         6: "Junio",
-        7:"Julio",
-        8:"Agosto",
-        9:"Septiembre",
-        10:"Octubre",
+        7: "Julio",
+        8: "Agosto",
+        9: "Septiembre",
+        10: "Octubre",
         11: "Noviembre",
         12: "Diciembre"
     }[num]

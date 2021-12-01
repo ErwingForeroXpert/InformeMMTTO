@@ -7,6 +7,7 @@ name = "pypi"
 webdriver-manager = "*"
 selenium = "*"
 xlwings = "*"
+python-dotenv = "*"
 
 [scripts]
 build = "pyinstaller --clean --onefile  index.py"
@@ -16,4 +17,4 @@ python-dotenv = "*"
 pyinstaller = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9.8"
