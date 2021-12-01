@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from utils import waitDownload, waitElement, waitElementDisable, deleteTemporals, \
-numToMonth, getIntervalDates,getMostRecentFile 
+numToMonth, getIntervalDates,getMostRecentFile, getRangeMonth
 from selenium.webdriver.common.by import By
 from dotenv import dotenv_values
 import xlwings as xw
@@ -23,7 +23,7 @@ chromeOptions = webdriver.ChromeOptions()
 prefs = {"download.default_directory": files_route}
 chromeOptions.add_experimental_option("prefs", prefs)
 
-def RunMacro(nameMacro):
+def RunMacro(nameMacro, _args=None):
     # ejecutar macro
     result = None
     parent_folder = os.path.join(os.getcwd(), "Documents")
@@ -35,10 +35,15 @@ def RunMacro(nameMacro):
 
     if book_mmto is None:
         raise Exception(f"El libro no se encuentra o no se puede abrir")
-
-    result = book_mmto.macro(nameMacro)()
+    
+    result = book_mmto.macro(nameMacro)(*_args) if _args is not None else book_mmto.macro(nameMacro)()
+    
     book_mmto.save()
-    book_mmto.close()
+
+    if len(book_mmto.app.books) == 1:
+        book_mmto.app.quit()
+    else:
+        book_mmto.close()
 
     return result
 
@@ -81,32 +86,38 @@ if __name__ == "__main__":
         chrome_driver.find_element_by_xpath(
             "//div/a[contains(text(),'Consultar')]").click()
 
-        temp_dates = getIntervalDates(_dates)
+        temp_dates = getIntervalDates(_dates) if (_dates is not None or None in _dates)  else []
 
-        for _date in temp_dates:
+        if _dates is not None:
+            for _date in temp_dates:
+                waitElement(chrome_driver, "FECHA_CREACION")
+                init_date_element = chrome_driver.find_element_by_id(
+                    "FECHA_CREACION")
+                end_data_element = chrome_driver.find_element_by_id(
+                    "FECHA_CREACIONFIN_GENERADO")
 
-            waitElement(chrome_driver, "FECHA_CREACION")
-            init_date_element = chrome_driver.find_element_by_id(
-                "FECHA_CREACION")
-            end_data_element = chrome_driver.find_element_by_id(
-                "FECHA_CREACIONFIN_GENERADO")
+                init_day, end_day = getRangeMonth(
+                    _date[0], _date[1])
 
-            init_day, end_day = calendar.monthrange(
-                int(_date[1]), int(_date[1]))
-            init_date_element.send_keys(fr"{_date[0]}/{_date[1]}/{init_day}")
-            end_data_element.send_keys(fr"{_date[0]}/{_date[1]}/{end_day}")
+                init_date_element.clear()
+                end_data_element.clear()
+                init_date_element.send_keys(fr"{_date[0]}/{_date[1]}/{init_day}")
+                end_data_element.send_keys(fr"{_date[0]}/{_date[1]}/{end_day}")
 
-            # descargar el reporte
-            chrome_driver.find_element_by_id("exportButton").click()
+                # descargar el reporte
+                chrome_driver.find_element_by_id("exportButton").click()
 
-            time.sleep(1)
-            waitElementDisable(chrome_driver, "ETAPA-list")
-            waitDownload(files_route)
+                time.sleep(1)
+                waitElementDisable(chrome_driver, "ETAPA-list")
+                waitDownload(files_route)
 
-            actual_file = getMostRecentFile(files_route, lambda x: "xls" in x)
-            RunMacro('Módulo1.CargarDatosArchivo')(actual_file, _date[0], numToMonth(_date[1]))
+                actual_file = getMostRecentFile(files_route, lambda x: "xls" in x)
+                RunMacro('Módulo1.CargarDatosArchivo', [actual_file, str(_date[0]), str(numToMonth(_date[1]))])
+        else:
+            print("\n No se encontraron fechas para procesar \n")
             
         print("\n Proceso Terminado, ya puede cerrar la ventana \n")
+
     except ValueError as e:
         raise exception(e)
     finally:

@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import calendar
 import time
 import os
 import glob
@@ -50,16 +51,19 @@ def getIntervalDates(_dates):
     temp_dates = []
     if len(_dates[0]) > 1:
         years_sort = sorted(_dates[0]) #2011, 2012,...
-        moths_sort = enumerate(sorted(_dates[1], reverse=True)) #12, 11, 10
-        for i, month in moths_sort: 
+        moths_sort = sorted(_dates[1], reverse=True) #12, 11, 10
+        for month in moths_sort: 
             if abs(moths_sort[0] - month) < 4:
-                temp_dates.append([years_sort[0], month])
+                temp_dates.append([int(years_sort[0]), int(month)])
             else:
-                temp_dates.append([years_sort[1], month])
+                temp_dates.append([int(years_sort[1]), int(month)])
     else:
-        temp_dates = [[_dates[0][0], month] for month in _dates[1]]
+        temp_dates = [[int(_dates[0][0]), int(month)] for month in _dates[1]]
 
     return temp_dates
+
+def getRangeMonth(year, month, init=1):
+    return "{:02d}".format(init), "{:02d}".format(calendar.monthrange(year, month)[1])
 
 def numToMonth(num):
     return {
@@ -76,3 +80,4 @@ def numToMonth(num):
         11: "Noviembre",
         12: "Diciembre"
     }[num]
+
