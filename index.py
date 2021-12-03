@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
         temp_dates = getIntervalDates(_dates) if (_dates is not None or None in _dates)  else []
 
-        if _dates is not None:
+        if temp_dates is not []:
             for _date in temp_dates:
                 waitElement(chrome_driver, "FECHA_CREACION")
                 init_date_element = chrome_driver.find_element_by_id(
