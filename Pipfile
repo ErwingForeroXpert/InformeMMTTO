@@ -8,6 +8,7 @@ webdriver-manager = "*"
 selenium = "*"
 xlwings = "*"
 python-dotenv = "*"
+pymsgbox = "*"
 
 [scripts]
 build = "pyinstaller --clean --onefile  index.py"

@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from dotenv import dotenv_values
 import xlwings as xw
 import time
-import calendar
+import pymsgbox
 import os
 
 
@@ -48,7 +48,7 @@ def RunMacro(nameMacro, _args=None):
     return result
 
 if __name__ == "__main__":
-
+    pymsgbox.alert("El proceso comenzo, por favor solo mueva el mouse o el teclado si excel se lo pide")
     chrome_driver = webdriver.Chrome(
         ChromeDriverManager().install(), chrome_options=chromeOptions)
     try:
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         chrome_driver.find_element_by_xpath(
             "//div/a[contains(text(),'Consultar')]").click()
 
-        temp_dates = getIntervalDates(_dates) if (_dates is not None or None in _dates)  else []
+        temp_dates = getIntervalDates(_dates) if (_dates is not None and None not in _dates)  else []
 
         if temp_dates is not []:
             for _date in temp_dates:
