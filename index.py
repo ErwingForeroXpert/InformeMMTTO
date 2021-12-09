@@ -114,8 +114,10 @@ if __name__ == "__main__":
                 actual_file = getMostRecentFile(files_route, lambda x: "xls" in x)
                 RunMacro('Módulo1.CargarDatosArchivo', [actual_file, str(_date[0]), str(numToMonth(_date[1]))])
         else:
+            pymsgbox.alert("\n No se encontraron fechas para procesar \n")
             print("\n No se encontraron fechas para procesar \n")
-            
+        
+        pymsgbox.alert("\n Proceso Terminado, ya puede cerrar la ventana \n")
         print("\n Proceso Terminado, ya puede cerrar la ventana \n")
 
     except ValueError as e:

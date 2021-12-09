@@ -47,18 +47,21 @@ def getMostRecentFile(path, _filter=None):
     return max(list_of_files, key=os.path.getctime)
 
 def getIntervalDates(_dates):
-
+    conv_dates = []
+    conv_dates.append([int(float(sub_num)) for sub_num in _dates[0] if ''.join(char for char in str(sub_num) if char.isdigit()) != ''])
+    conv_dates.append([int(float(sub_num)) for sub_num in _dates[1] if ''.join(char for char in str(sub_num) if char.isdigit()) != ''])
+    
     temp_dates = []
-    if len(_dates[0]) > 1:
-        years_sort = sorted(_dates[0]) #2011, 2012,...
-        moths_sort = sorted(_dates[1], reverse=True) #12, 11, 10
+    if len(conv_dates[0]) > 1:
+        years_sort = sorted(conv_dates[0]) #2011, 2012,...
+        moths_sort = sorted(conv_dates[1], reverse=True) #12, 11, 10
         for month in moths_sort: 
             if abs(moths_sort[0] - month) < 4:
                 temp_dates.append([int(years_sort[0]), int(month)])
             else:
                 temp_dates.append([int(years_sort[1]), int(month)])
     else:
-        temp_dates = [[int(_dates[0][0]), int(month)] for month in _dates[1]]
+        temp_dates = [[int(conv_dates[0][0]), int(month)] for month in conv_dates[1]]
 
     return temp_dates
 
