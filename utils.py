@@ -18,6 +18,10 @@ def waitElementDisable(driver, element, by=By.ID):
         EC.invisibility_of_element_located((by, element))
     )
 
+def waitElementClickable(driver, element, by=By.ID):
+    return WebDriverWait(driver, 30).until(
+        EC.element_to_be_clickable((by, element))
+    )
 
 def waitDownload(path):
     if not os.path.exists(path):

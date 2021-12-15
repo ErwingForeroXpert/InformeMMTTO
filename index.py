@@ -3,7 +3,7 @@ import unittest
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from utils import waitDownload, waitElement, waitElementDisable, deleteTemporals, \
+from utils import waitDownload, waitElement, waitElementDisable, waitElementClickable, deleteTemporals, \
 numToMonth, getIntervalDates,getMostRecentFile, getRangeMonth
 from selenium.webdriver.common.by import By
 from dotenv import dotenv_values
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     try:
         deleteTemporals(files_route)
         
-        _dates = RunMacro('Módulo1.PreProcesarDatos')
+        _dates = RunMacro('Módulo1.ObtenerFechas')
         
         chrome_driver.get(config["SIGMA_URL"])
 
@@ -108,15 +108,21 @@ if __name__ == "__main__":
                 chrome_driver.find_element_by_id("exportButton").click()
 
                 time.sleep(1)
-                waitElementDisable(chrome_driver, "ETAPA-list")
+                waitElementClickable(chrome_driver, "//button[contains(@id, 'exportButton') and contains(text(), 'Exportar')]", By.XPATH)
+                time.sleep(2)
                 waitDownload(files_route)
-
+                
+                time.sleep(2)
                 actual_file = getMostRecentFile(files_route, lambda x: "xls" in x)
                 RunMacro('Módulo1.CargarDatosArchivo', [actual_file, str(_date[0]), str(numToMonth(_date[1]))])
         else:
             pymsgbox.alert("\n No se encontraron fechas para procesar \n")
             print("\n No se encontraron fechas para procesar \n")
-        
+
+        #insertar codigos de barras
+        time.sleep(2)
+
+        RunMacro('Módulo1.InsertarCodigos')
         pymsgbox.alert("\n Proceso Terminado, ya puede cerrar la ventana \n")
         print("\n Proceso Terminado, ya puede cerrar la ventana \n")
 
