@@ -90,6 +90,7 @@ if __name__ == "__main__":
 
         if temp_dates is not []:
             for _date in temp_dates:
+                
                 waitElement(chrome_driver, "FECHA_CREACION")
                 init_date_element = chrome_driver.find_element_by_id(
                     "FECHA_CREACION")
