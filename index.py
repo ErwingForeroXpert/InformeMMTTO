@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from utils import waitDownload, waitElement, waitElementDisable, waitElementClickable, deleteTemporals, \
-numToMonth, getIntervalDates,getMostRecentFile, getRangeMonth
+numToMonth, getIntervalDates,getMostRecentFile, getRangeMonth, createNecesaryFolders
 from selenium.webdriver.common.by import By
 from dotenv import dotenv_values
 import xlwings as xw
@@ -52,6 +52,8 @@ if __name__ == "__main__":
     chrome_driver = webdriver.Chrome(
         ChromeDriverManager().install(), chrome_options=chromeOptions)
     try:
+        createNecesaryFolders(os.getcwd(), [
+                              "files"])
         deleteTemporals(files_route)
         
         _dates = RunMacro('modulo.ObtenerFechas')
@@ -67,7 +69,7 @@ if __name__ == "__main__":
         pass_element.send_keys(Keys.ENTER)
 
         # Esperar el Home
-        waitElement(chrome_driver, "menu")
+        waitElementClickable(chrome_driver, "menu")
 
         # seleccionar consultas rapidas
         report_element = chrome_driver.find_element_by_xpath(
@@ -76,7 +78,7 @@ if __name__ == "__main__":
         time.sleep(1)
         report_element.find_element_by_xpath(".//li[2]").click()
 
-        waitElement(
+        waitElementClickable(
             chrome_driver,
             "//tr/td[@role='gridcell'and contains(text(),'53')]",
             By.XPATH)
@@ -91,7 +93,7 @@ if __name__ == "__main__":
         if temp_dates is not []:
             for _date in temp_dates: #_date: [month, year]
                 
-                waitElement(chrome_driver, "FECHA_CREACION")
+                waitElementClickable(chrome_driver, "FECHA_CREACION")
                 init_date_element = chrome_driver.find_element_by_id(
                     "FECHA_CREACION")
                 end_data_element = chrome_driver.find_element_by_id(

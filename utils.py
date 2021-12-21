@@ -8,26 +8,61 @@ import os
 import glob
 
 
-def waitElement(driver, element, by=By.ID):
+def waitElement(driver, element, by=By.ID, exist=False):
+    """wait for the element appear on the Screen
+
+    Args:
+        driver (WebDriver): web driver see https://www.selenium.dev/documentation/webdriver/
+        element (Object<Any>): element see https://selenium-python.readthedocs.io/locating-elements.html
+        by (String, optional): Searcher. Defaults to By.ID.
+        exist (bool, optional): if element already existed. Defaults to False.
+
+    Returns:
+        WebDriverWait: Constructor, takes a WebDriver instance and timeout in seconds.
+    """
+
     return WebDriverWait(driver, 30).until(
-        EC.element_to_be_clickable((by, element))
+        lambda driver: driver.find_element(by,element) if exist else EC.visibility_of_element_located((by, element))
     )
 
 
 def waitElementDisable(driver, element, by=By.ID):
+    """wait for the element disappear of the screen
+
+    Args:
+        driver (WebDriver): web driver see https://www.selenium.dev/documentation/webdriver/
+        element (Object<Any>): element see https://selenium-python.readthedocs.io/locating-elements.html
+        by (String, optional): Searcher. Defaults to By.ID.
+
+    Returns:
+        WebDriverWait: Constructor, takes a WebDriver instance and timeout in seconds.
+    """
     return WebDriverWait(driver, 30).until(
         EC.invisibility_of_element_located((by, element))
     )
 
 def waitElementClickable(driver, element, by=By.ID):
+    """wait for element to be clickable
+
+    Args:
+        driver (WebDriver): web driver see https://www.selenium.dev/documentation/webdriver/
+        element (Object<Any>): element see https://selenium-python.readthedocs.io/locating-elements.html
+        by (String, optional): Searcher. Defaults to By.ID.
+
+    Returns:
+        WebDriverWait: Constructor, takes a WebDriver instance and timeout in seconds.
+    """
+
     return WebDriverWait(driver, 30).until(
         EC.element_to_be_clickable((by, element))
     )
 
 def waitDownload(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+    """wait that elements in state downloading disappear
 
+    Args:
+        path (String): Folder of downloads
+    """
     tempfiles = 0
     while tempfiles == 0:
         time.sleep(1)
@@ -38,8 +73,23 @@ def waitDownload(path):
             else:
                 tempfiles = 1
 
+def createNecesaryFolders(path, folders):
+    """Create folders
 
+    Args:
+        path (String): Folder parents
+        folders (String): Folder childrens
+    """
+    for folder in folders:
+        if not os.path.exists(os.path.join(path, folder)):
+            os.makedirs(os.path.join(path, folder))
+            
 def deleteTemporals(path):
+    """Delete elements of path
+
+    Args:
+        path (String): Folder parent
+    """
     if not os.path.exists(path):
         return
     for fname in os.listdir(path):
@@ -47,12 +97,35 @@ def deleteTemporals(path):
 
 
 def getMostRecentFile(path, _filter=None):
+    """Get most recent file for date
+
+    Args:
+        path (String): Folder parent
+        _filter (function, optional): filter name of documents. Defaults to None.
+
+    Returns:
+        String: path of file most recent
+    """
     list_of_files = glob.glob(fr'{path}/*')
     list_of_files = filter(_filter, list_of_files) if _filter is not None else list_of_files
     return max(list_of_files, key=os.path.getctime)
 
 def getIntervalDates(_dates):
+    """Get Interval of dates
 
+    Args:
+        _dates (tuple): tuple of interval dates, maxlen 2
+
+    Returns:
+        list: list of interval months
+    
+    Example:
+        getIntervalDates((
+            (11,2021), (01,2022)
+            ))
+        returns:
+            [[11,2021], [12,2021], [01,2022]]
+    """
     if len(_dates) > 2:
         _dates = _dates[:2]
 
@@ -74,6 +147,15 @@ def getIntervalDates(_dates):
     return interval_dates
 
 def intervalOfMonths(d1, d2):
+    """get interval of months into two dates
+
+    Args:
+        d1 (list): min date of interval
+        d2 (list): max date of interval
+
+    Returns:
+        list: list with months, [[month, year],...]
+    """
     init = d1[0]
     limit = 12 + d2[0] if d2[0] < d1[0] else d2[0]
     months = []
@@ -86,9 +168,27 @@ def intervalOfMonths(d1, d2):
     return months
 
 def getRangeMonth(year, month, init=1):
+    """Get first and last day of month
+
+    Args:
+        year (int): year
+        month (int): month
+        init (int, optional): first day of month. Defaults to 1.
+
+    Returns:
+        tuple: first day, last day
+    """
     return "{:02d}".format(init), "{:02d}".format(calendar.monthrange(year, month)[1])
 
 def numToMonth(num):
+    """Num to Spanish month 
+
+    Args:
+        num (int): num of month
+
+    Returns:
+        String: month
+    """
     return {
         1: "Enero",
         2: "Febrero",
