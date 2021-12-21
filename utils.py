@@ -62,7 +62,7 @@ def getIntervalDates(_dates):
     if (date(end_date[1],end_date[0],1) - date(datetime.today().year, datetime.today().month, 1)).days < 0:
         conv_dates[-1] = [datetime.today().month, datetime.today().year]
     
-    interval_dates = [[_m, _y] for _m in ] 
+    interval_dates = intervalOfMonths(conv_dates)
 
     # # temp_dates = []
     # # if len(conv_dates[0]) > 1:
@@ -78,8 +78,17 @@ def getIntervalDates(_dates):
 
     return temp_dates
 
-def diff_month(d1, d2):
-    return (d1[1] - d2[1]) * 12 + d1[0] - d2[0]
+def intervalOfMonths(d1, d2):
+    init = d1[0]
+    limit = 12 + d2[0] if d2[0] < d1[0] else d2[0]
+    months = []
+    while init <= limit:
+        if init <= 12:
+            months.append([init, d1[1]])
+        else:
+            months.append([init-12, d2[1]])
+        init+=1
+    return months
 
 def getRangeMonth(year, month, init=1):
     return "{:02d}".format(init), "{:02d}".format(calendar.monthrange(year, month)[1])
