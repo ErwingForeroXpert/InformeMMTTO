@@ -52,31 +52,23 @@ def getMostRecentFile(path, _filter=None):
     return max(list_of_files, key=os.path.getctime)
 
 def getIntervalDates(_dates):
+    
+    if len(_dates) > 2:
+        _dates = _dates[:2]
+
     conv_dates = []
     for temp_date in _dates:
         conv_dates.append(sorted([int(float(sub_num)) for sub_num in temp_date if ''.join(char for char in str(sub_num) if char.isdigit()) != ''])) #month, year
 
-    conv_dates = sorted(conv_dates, key=lambda x: (date(x[1], x[0], 1) - date.today()).days)
+    conv_dates = sorted(conv_dates, key=lambda x: (date(x[1], x[0], 1) - date.today()).days) #order from smallest to largest
 
-    end_date = conv_dates[-1]
-    if (date(end_date[1],end_date[0],1) - date(datetime.today().year, datetime.today().month, 1)).days < 0:
+    end_date = conv_dates[1] #lastest date
+    if (date(end_date[1],end_date[0],1) - date(datetime.today().year, datetime.today().month, 1)).days < 0: #if the lastest date is less than the current one
         conv_dates[-1] = [datetime.today().month, datetime.today().year]
     
-    interval_dates = intervalOfMonths(conv_dates)
+    interval_dates = intervalOfMonths(conv_dates) if len(conv_dates) > 1 else conv_dates #get interval of months
 
-    # # temp_dates = []
-    # # if len(conv_dates[0]) > 1:
-    # #     years_sort = sorted(conv_dates[0]) #2011, 2012,...
-    # #     moths_sort = sorted(conv_dates[1], reverse=True) #12, 11, 10
-    # #     for month in moths_sort: 
-    # #         if abs(moths_sort[0] - month) < 4:
-    # #             temp_dates.append([int(years_sort[0]), int(month)])
-    # #         else:
-    # #             temp_dates.append([int(years_sort[1]), int(month)])
-    # # else:
-    # #     temp_dates = [[int(conv_dates[0][0]), int(month)] for month in conv_dates[1]]
-
-    return temp_dates
+    return interval_dates
 
 def intervalOfMonths(d1, d2):
     init = d1[0]
