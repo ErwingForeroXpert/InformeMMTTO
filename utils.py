@@ -78,6 +78,9 @@ def getIntervalDates(_dates):
 
     return temp_dates
 
+def diff_month(d1, d2):
+    return (d1[1] - d2[1]) * 12 + d1[0] - d2[0]
+
 def getRangeMonth(year, month, init=1):
     return "{:02d}".format(init), "{:02d}".format(calendar.monthrange(year, month)[1])
 
