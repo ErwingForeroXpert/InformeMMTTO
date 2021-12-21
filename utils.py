@@ -69,7 +69,7 @@ def getIntervalDates(_dates):
         else:
             conv_dates[-1] = [datetime.today().month, datetime.today().year]
     
-    interval_dates = intervalOfMonths(conv_dates) if len(conv_dates) > 1 else conv_dates #get interval of months
+    interval_dates = intervalOfMonths(conv_dates[0], conv_dates[1]) if len(conv_dates) > 1 else conv_dates #get interval of months
 
     return interval_dates
 

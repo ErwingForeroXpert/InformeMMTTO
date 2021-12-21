@@ -89,7 +89,7 @@ if __name__ == "__main__":
         temp_dates = getIntervalDates(_dates) if (_dates is not None and None not in _dates)  else []
 
         if temp_dates is not []:
-            for _date in temp_dates:
+            for _date in temp_dates: #_date: [month, year]
                 
                 waitElement(chrome_driver, "FECHA_CREACION")
                 init_date_element = chrome_driver.find_element_by_id(
@@ -115,7 +115,7 @@ if __name__ == "__main__":
                 
                 time.sleep(2)
                 actual_file = getMostRecentFile(files_route, lambda x: "xls" in x)
-                RunMacro('modulo.CargarDatosArchivo', [actual_file, str(_date[0]), str(numToMonth(_date[1]))])
+                RunMacro('modulo.CargarDatosArchivo', [actual_file, str(_date[1]), str(numToMonth(_date[0]))])
         else:
             pymsgbox.alert("\n No se encontraron fechas para procesar \n")
             print("\n No se encontraron fechas para procesar \n")
