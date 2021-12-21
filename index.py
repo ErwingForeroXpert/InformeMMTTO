@@ -98,12 +98,12 @@ if __name__ == "__main__":
                     "FECHA_CREACIONFIN_GENERADO")
 
                 init_day, end_day = getRangeMonth(
-                    _date[0], _date[1])
+                    _date[1], _date[0])
 
                 init_date_element.clear()
                 end_data_element.clear()
-                init_date_element.send_keys(fr"{_date[0]}/{_date[1]}/{init_day}")
-                end_data_element.send_keys(fr"{_date[0]}/{_date[1]}/{end_day}")
+                init_date_element.send_keys(fr"{_date[1]}/{_date[0]}/{init_day}")
+                end_data_element.send_keys(fr"{_date[1]}/{_date[0]}/{end_day}")
 
                 # descargar el reporte
                 chrome_driver.find_element_by_id("exportButton").click()
