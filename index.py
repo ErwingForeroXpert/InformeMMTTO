@@ -114,7 +114,6 @@ if __name__ == "__main__":
                 waitElementClickable(chrome_driver, "//button[contains(@id, 'exportButton') and contains(text(), 'Exportar')]", By.XPATH)
                 time.sleep(2)
                 waitDownload(files_route)
-                
                 time.sleep(2)
                 actual_file = getMostRecentFile(files_route, lambda x: "xls" in x)
                 RunMacro('modulo.CargarDatosArchivo', [actual_file, str(_date[1]), str(numToMonth(_date[0]))])
