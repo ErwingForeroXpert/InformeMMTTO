@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from datetime import date, datetime
 import calendar
 import time
 import os
@@ -53,10 +54,16 @@ def getMostRecentFile(path, _filter=None):
 def getIntervalDates(_dates):
     conv_dates = []
     for temp_date in _dates:
-        conv_dates.append([int(float(sub_num)) for sub_num in temp_date if ''.join(char for char in str(sub_num) if char.isdigit()) != ''])
-    conv_dates.append()
-    conv_dates.append([int(float(sub_num)) for sub_num in _dates[1] if ''.join(char for char in str(sub_num) if char.isdigit()) != ''])
+        conv_dates.append(sorted([int(float(sub_num)) for sub_num in temp_date if ''.join(char for char in str(sub_num) if char.isdigit()) != ''])) #month, year
+
+    conv_dates = sorted(conv_dates, key=lambda x: (date(x[1], x[0], 1) - date.today()).days)
+
+    end_date = conv_dates[-1]
+    if (date(end_date[1],end_date[0],1) - date(datetime.today().year, datetime.today().month, 1)).days < 0:
+        conv_dates[-1] = [datetime.today().month, datetime.today().year]
     
+    interval_dates = [[_m, _y] for _m in ] 
+
     # # temp_dates = []
     # # if len(conv_dates[0]) > 1:
     # #     years_sort = sorted(conv_dates[0]) #2011, 2012,...
