@@ -62,7 +62,7 @@ def getIntervalDates(_dates):
 
     conv_dates = sorted(conv_dates, key=lambda x: (date(x[1], x[0], 1) - date.today()).days) #order from smallest to largest
 
-    end_date = conv_dates[1] #lastest date
+    end_date = conv_dates[-1] #lastest date
     if (date(end_date[1], end_date[0], 1) - date(datetime.today().year, datetime.today().month, 1)).days < 0: #if the lastest date is less than the current one
         if len(conv_dates) == 1:
             conv_dates.append([datetime.today().month, datetime.today().year])

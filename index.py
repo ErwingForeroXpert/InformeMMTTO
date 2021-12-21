@@ -54,7 +54,7 @@ if __name__ == "__main__":
     try:
         deleteTemporals(files_route)
         
-        _dates = RunMacro('Módulo1.ObtenerFechas')
+        _dates = RunMacro('modulo.ObtenerFechas')
         
         chrome_driver.get(config["SIGMA_URL"])
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
                 
                 time.sleep(2)
                 actual_file = getMostRecentFile(files_route, lambda x: "xls" in x)
-                RunMacro('Módulo1.CargarDatosArchivo', [actual_file, str(_date[0]), str(numToMonth(_date[1]))])
+                RunMacro('modulo.CargarDatosArchivo', [actual_file, str(_date[0]), str(numToMonth(_date[1]))])
         else:
             pymsgbox.alert("\n No se encontraron fechas para procesar \n")
             print("\n No se encontraron fechas para procesar \n")
@@ -123,7 +123,7 @@ if __name__ == "__main__":
         #insertar codigos de barras
         time.sleep(2)
 
-        RunMacro('Módulo1.InsertarCodigos')
+        RunMacro('modulo.InsertarCodigos')
         pymsgbox.alert("\n Proceso Terminado, ya puede cerrar la ventana \n")
         print("\n Proceso Terminado, ya puede cerrar la ventana \n")
 
