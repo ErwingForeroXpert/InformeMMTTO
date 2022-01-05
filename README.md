@@ -79,11 +79,11 @@ _Para Generar el archivo ejecutable es necesario lo siguiente:_
    Deberia mostar la ruta del entorno virtual activo.
    
 2. Ejecutar el siguiente comando:
-  ```sh
+   ```sh
    pipenv run build
    ```
 3. Crear el archivo ".env" en el directorio `./dist/`, el cual debe contener lo siguiente:
-  ```sh
+   ```sh
    URL_EFICACIA="URL"
    USER="USUARIO"
    PASSWORD="CONTRASEÑA"
